@@ -40,7 +40,14 @@ def create_bomb_images_and_accs() -> tuple[list[pg.Surface], list[int]]:
         bb_imgs.append(bb_img)
     
     return bb_imgs, bb_accs
-
+def game_over(screen:pg.Surface, gob_img:pg.Surface,txt:pg.Surface,cry_kk_img:pg.Surface):
+        screen.blit(gob_img, (0, 0))
+        screen.blit(txt, [420, 280])
+        screen.blit(cry_kk_img, (360, 280))
+        screen.blit(cry_kk_img, (730, 280))
+        pg.display.flip()
+        time.sleep(5)
+        return
 def main():
     pg.display.set_caption("逃げろ！こうかとん")
     screen = pg.display.set_mode((WIDTH, HEIGHT))
@@ -68,14 +75,8 @@ def main():
                 return
 
         screen.blit(bg_img, [0, 0])
-
-        if kk_rct.colliderect(bb_rct):  #   工科トンと爆弾が重なっていたら
-            screen.blit(gob_img, (0, 0))
-            screen.blit(txt, [420, 280])
-            screen.blit(cry_kk_img, (360, 280))
-            screen.blit(cry_kk_img, (730, 280))
-            pg.display.flip()
-            time.sleep(5)
+        if kk_rct.colliderect(bb_rct):
+            game_over(screen,gob_img,txt,cry_kk_img)  #   工科トンと爆弾が重なっていたら
             return
         idx = min(tmr // 500, 9) 
         bb_img = bb_imgs[idx]
