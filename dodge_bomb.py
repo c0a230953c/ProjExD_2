@@ -31,15 +31,15 @@ def create_bomb_images_and_accs() -> tuple[list[pg.Surface], list[int]]:
     """
     爆弾の拡大サーフェスと加速度のリストを返す
     """
-    bd_imgs = []
-    bd_accs = [a for a in range(1, 11)]
+    bb_imgs = []
+    bb_accs = [a for a in range(1, 11)]
     
     for r in range(1, 11):
-        bd_img = pg.Surface((20 * r, 20 * r), pg.SRCALPHA)
-        pg.draw.circle(bd_img, (255, 0, 0), (10 * r, 10 * r), 10 * r)
-        bd_imgs.append(bd_img)
+        bb_img = pg.Surface((20 * r, 20 * r), pg.SRCALPHA)
+        pg.draw.circle(bb_img, (255, 0, 0), (10 * r, 10 * r), 10 * r)
+        bb_imgs.append(bb_img)
     
-    return bd_imgs, bd_accs
+    return bb_imgs, bb_accs
 
 def main():
     pg.display.set_caption("逃げろ！こうかとん")
@@ -48,9 +48,9 @@ def main():
     kk_img = pg.transform.rotozoom(pg.image.load("fig/3.png"), 0, 0.9)
     kk_rct = kk_img.get_rect()
     kk_rct.center = 300, 200
-    bd_imgs, bd_accs = create_bomb_images_and_accs()
-    bd_rct = bd_imgs[0].get_rect()
-    bd_rct.center = random.randint(0, WIDTH), random.randint(0, HEIGHT)
+    bb_imgs, bb_accs = create_bomb_images_and_accs()
+    bb_rct = bb_imgs[0].get_rect()
+    bb_rct.center = random.randint(0, WIDTH), random.randint(0, HEIGHT)
     vx, vy = +5, -5
     gob_img = pg.Surface((1100, 650))
     gob_img.set_alpha(128)
@@ -69,7 +69,7 @@ def main():
 
         screen.blit(bg_img, [0, 0])
 
-        if kk_rct.colliderect(bd_rct):  #   工科トンと爆弾が重なっていたら
+        if kk_rct.colliderect(bb_rct):  #   工科トンと爆弾が重なっていたら
             screen.blit(gob_img, (0, 0))
             screen.blit(txt, [420, 280])
             screen.blit(cry_kk_img, (360, 280))
@@ -78,9 +78,9 @@ def main():
             time.sleep(5)
             return
         idx = min(tmr // 500, 9) 
-        bd_img = bd_imgs[idx]
-        avx = vx * bd_accs[idx]
-        avy = vy * bd_accs[idx]
+        bb_img = bb_imgs[idx]
+        avx = vx * bb_accs[idx]
+        avy = vy * bb_accs[idx]
         key_lst = pg.key.get_pressed()
         sum_mv = [0, 0]
         for key, tpl in DELTA.items():
@@ -92,13 +92,13 @@ def main():
             kk_rct.move_ip(-sum_mv[0], -sum_mv[1])
         screen.blit(kk_img, kk_rct)
 
-        bd_rct.move_ip(avx, avy)
-        yoko, tate = check_bound(bd_rct)
+        bb_rct.move_ip(avx, avy)
+        yoko, tate = check_bound(bb_rct)
         if not yoko:
             vx *= -1
         if not tate:
             vy *= -1
-        screen.blit(bd_img, bd_rct)
+        screen.blit(bb_img, bb_rct)
         pg.display.update()
         tmr += 1
         clock.tick(50)
